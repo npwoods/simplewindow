@@ -5,7 +5,7 @@ version = "0.1.0"
 
 [dependencies]
 anyhow = "1.0.102"
-clap = { version = "4.3", features = ["derive"] }
+clap = { version = "4.5", features = ["derive"] }
 raw-window-handle = "0.6"
 winit = { version = "0.30.13", features = ["rwh_05"] }
-x11 = "2.20.0"
+x11 = "2.21.0"
