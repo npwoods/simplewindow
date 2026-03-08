@@ -2,7 +2,7 @@
 authors = ["Nathan Woods <npwoods@alumni.cmu.edu>"]
 description = "A cross platform tool to display a single window"
 edition = "2024"
-license = "GPL2"
+license = "GPL-2.0-or-later"
 name = "simplewindow"
 repository = "https://github.com/npwoods/simplewindow"
 version = "0.1.0"
