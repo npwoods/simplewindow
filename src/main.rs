@@ -1,7 +1,7 @@
 use anyhow::Result;
 use clap::Parser;
-use raw_window_handle::{HasWindowHandle, RawWindowHandle};
-//use std::mem::MaybeUninit;
+use raw_window_handle::HasWindowHandle;
+use raw_window_handle::RawWindowHandle;
 use winit::application::ApplicationHandler;
 use winit::dpi::PhysicalSize;
 use winit::event::WindowEvent;
@@ -9,7 +9,6 @@ use winit::event_loop::ActiveEventLoop;
 use winit::event_loop::EventLoop;
 use winit::window::Window;
 use winit::window::WindowId;
-//use x11::xlib;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -63,29 +62,6 @@ impl ApplicationHandler for App {
 							RawWindowHandle::Xlib(handle) => {
 								let window = handle.window as usize;
 								println!("X11 Window ID (Xlib): 0x{:X} ({})", window, window);
-
-								/*
-								// Unselect specific event masks that winit may have set
-								unsafe {
-									if !handle.display.is_null() {
-										let display = handle.display as *mut xlib::Display;
-										let mut attrs = MaybeUninit::<xlib::XWindowAttributes>::uninit();
-										let status = xlib::XGetWindowAttributes(display, handle.window as xlib::Window, attrs.as_mut_ptr());
-										if status != 0 {
-											let attrs = attrs.assume_init();
-											let current_mask = attrs.your_event_mask;
-											let masks_to_unset = (xlib::StructureNotifyMask as xlib::long)
-												| (xlib::ExposureMask as xlib::long)
-												| (xlib::KeyPressMask as xlib::long)
-												| (xlib::KeyReleaseMask as xlib::long)
-												| (xlib::FocusChangeMask as xlib::long);
-											let new_mask = current_mask & !masks_to_unset;
-											xlib::XSelectInput(display, handle.window as xlib::Window, new_mask);
-											xlib::XFlush(display);
-										}
-									}
-								}
-								 */
 							}
 							RawWindowHandle::Xcb(handle) => {
 								let window = handle.window.get() as usize;
