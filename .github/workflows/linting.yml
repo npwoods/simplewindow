@@ -1,0 +1,66 @@
+on:
+    push:
+        branches:
+        - master
+    pull_request:
+        branches:
+        - master
+
+name: Linting (Clippy and Rustfmt)
+
+jobs:
+  clippy:
+    name: Clippy
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        features: ["--all-features"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Install Rust toolchain
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      # Install Rust Components
+      - name: Install Rust Components
+        run: rustup component add clippy
+
+      # Caching
+      - name: Caching
+        uses: Swatinem/rust-cache@v2
+
+      # Run Clippy
+      - name: Clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --locked ${{ matrix.features }} --all-targets -- -D warnings
+
+  fmt:
+    name: Rustfmt
+    runs-on: ubuntu-latest
+    steps:
+      # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Install Rust toolchain
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      # Install Rust Components
+      - run: rustup component add rustfmt
+
+      # Rustfmt
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
