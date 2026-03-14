@@ -16,7 +16,7 @@ jobs:
       - name: Verify git tag matches version
         if: github.event_name == 'workflow_dispatch'
         run: |
-          VERSION=$(grep "^version" Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
+          VERSION=v$(grep "^version" Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
           GIT_TAG=$(git describe --exact-match --tags HEAD 2>/dev/null || echo "")
           if [ -z "$GIT_TAG" ]; then
             echo "Error: Current commit is not tagged"
